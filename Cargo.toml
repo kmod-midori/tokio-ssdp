@@ -1,12 +1,24 @@
 [package]
 name = "tokio-ssdp"
 version = "0.1.0"
+authors = ["Harry Cheng <chengyuhui1@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/chengyuhui/tokio-ssdp"
+homepage = "https://github.com/chengyuhui/tokio-ssdp"
+documentation = "https://docs.rs/tokio-ssdp"
+description = """
+A mininal SSDP device implementation using `tokio`.
+"""
+keywords = ["network", "ssdp", "dlna"]
+categories = ["network-programming"]
 edition = "2018"
+include = ["Cargo.toml", "LICENSE", "README.md", "src/**/*.rs"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tokio = { version = "1", features = ["net"] }
+tokio = { version = "1", features = ["net", "time"] }
 httparse = "1.5.1"
 socket2 = "0.4.1"
 log = "0.4"
@@ -15,6 +27,3 @@ httpdate = "1.0.1"
 [dev-dependencies]
 env_logger = "0.9.0"
 tokio = { version = "1", features = ["full"] }
-
-[[example]]
-name = "server"

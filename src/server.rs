@@ -16,6 +16,7 @@ const SSDP_PORT: u16 = 1900;
 const DEFAULT_SERVER_NAME: &str = "Tokio-SSDP/1.0 UPnP/1.0";
 
 /// A server providing SSDP functionalities.
+/// The server will respond to `M-SEARCH` requests, send `alive` and `byebye` messages when needed.
 #[derive(Debug, Clone)]
 pub struct Server {
     server_name: Option<String>,
@@ -220,7 +221,7 @@ impl Server {
             if header.name.eq_ignore_ascii_case("mx") {
                 let val = String::from_utf8_lossy(header.value);
 
-                mx = match u32::from_str_radix(&val, 10) {
+                mx = match val.parse() {
                     Ok(v) => v,
                     Err(e) => return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, e)),
                 };
@@ -287,11 +288,7 @@ impl Server {
             ),
             date = httpdate::fmt_http_date(SystemTime::now()),
             loc = device.location,
-            server = self
-                .server_name
-                .as_ref()
-                .map(|s| s.as_str())
-                .unwrap_or(DEFAULT_SERVER_NAME),
+            server = self.server_name.as_deref().unwrap_or(DEFAULT_SERVER_NAME),
             st = device.search_target,
             usn = device.usn,
             headers = extra_headers
@@ -332,11 +329,7 @@ impl Server {
                 ssdp_addr = SSDP_ADDR,
                 ssdp_port = SSDP_PORT,
                 loc = device.location,
-                server = self
-                    .server_name
-                    .as_ref()
-                    .map(|s| s.as_str())
-                    .unwrap_or(DEFAULT_SERVER_NAME),
+                server = self.server_name.as_deref().unwrap_or(DEFAULT_SERVER_NAME),
                 st = device.search_target,
                 usn = device.usn,
                 headers = extra_headers
