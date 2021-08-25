@@ -1,0 +1,20 @@
+[package]
+name = "tokio-ssdp"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1", features = ["net"] }
+httparse = "1.5.1"
+socket2 = "0.4.1"
+log = "0.4"
+httpdate = "1.0.1"
+
+[dev-dependencies]
+env_logger = "0.9.0"
+tokio = { version = "1", features = ["full"] }
+
+[[example]]
+name = "server"
